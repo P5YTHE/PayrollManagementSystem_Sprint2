@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,10 +59,21 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             List<EmployeeMaster> empList = new List<EmployeeMaster>();
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{localHostLink}api/EmployeeMasters");
-            string apiResponse = await response.Content.ReadAsStringAsync();
-            empList = JsonConvert.DeserializeObject<List<EmployeeMaster>>(apiResponse);
-            return View(empList);
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await httpClient.GetAsync($"api/EmployeeMasters");
+            //string apiResponse = await response.Content.ReadAsStringAsync();
+            //empList = JsonConvert.DeserializeObject<List<EmployeeMaster>>(apiResponse);
+            if (response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                empList = JsonConvert.DeserializeObject<List<EmployeeMaster>>(apiResponse);
+                return View(empList);
+            }
+            else { return Unauthorized(); }
         }
 
         [HttpGet]
@@ -169,10 +181,21 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             List<TimeSheet> timesheetList = new List<TimeSheet>();
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{localHostLink}api/TimeSheets");
-            string apiResponse = await response.Content.ReadAsStringAsync();
-            timesheetList = JsonConvert.DeserializeObject<List<TimeSheet>>(apiResponse);
-            return View(timesheetList);                        
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await httpClient.GetAsync($"api/TimeSheets");
+            if (response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                timesheetList = JsonConvert.DeserializeObject<List<TimeSheet>>(apiResponse);
+                return View(timesheetList);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         public async Task<IActionResult> EditTimesheet(int id)             //Approve Timesheets
@@ -212,10 +235,22 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             List<PayrollMaster> payrollMaster = new List<PayrollMaster>();
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{localHostLink}api/PayrollMasters");
-            string apiResponse = await response.Content.ReadAsStringAsync();
-            payrollMaster = JsonConvert.DeserializeObject<List<PayrollMaster>>(apiResponse);
-            return View(payrollMaster);
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var res = HttpContext.Session.GetString("EmployeeID");
+            var response = await httpClient.GetAsync($"api/PayrollMasters");
+            if (response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                payrollMaster = JsonConvert.DeserializeObject<List<PayrollMaster>>(apiResponse);
+                return View(payrollMaster);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
         public async Task<IActionResult> ViewPayrollDetails(string id)
         {
@@ -286,10 +321,21 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             List<LeaveDetail> leaveDetail = new List<LeaveDetail>();
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{localHostLink}api/LeaveDetails");
-            string apiResponse = await response.Content.ReadAsStringAsync();
-            leaveDetail = JsonConvert.DeserializeObject<List<LeaveDetail>>(apiResponse);
-            return View(leaveDetail);
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await httpClient.GetAsync($"api/LeaveDetails");
+            if (response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                leaveDetail = JsonConvert.DeserializeObject<List<LeaveDetail>>(apiResponse);
+                return View(leaveDetail);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         public async Task<IActionResult> ViewLeaveDetails(string id)

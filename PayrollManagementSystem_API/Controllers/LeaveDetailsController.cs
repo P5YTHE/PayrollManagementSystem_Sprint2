@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using PayrollManagementSystem_API.Models;
 
 namespace PayrollManagementSystem_API.Controllers
@@ -21,6 +22,7 @@ namespace PayrollManagementSystem_API.Controllers
         }
 
         // GET: api/LeaveDetails
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LeaveDetail>>> GetLeaveDetails()
         {
@@ -28,6 +30,7 @@ namespace PayrollManagementSystem_API.Controllers
         }
 
         // GET: api/LeaveDetails/5
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<LeaveDetail>> GetLeaveDetail(int id)
         {
