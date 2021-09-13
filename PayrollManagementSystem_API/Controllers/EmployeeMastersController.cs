@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace PayrollManagementSystem_API.Controllers
         }
 
         // GET: api/EmployeeMasters
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeMaster>>> GetEmployeeMasters()
         {
@@ -36,6 +38,7 @@ namespace PayrollManagementSystem_API.Controllers
         }
 
         // GET: api/EmployeeMasters/5
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeMaster>> GetEmployeeMaster(string id)
         {

@@ -52,23 +52,37 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             var emp = new EmployeeMaster();
             HttpClient httpClient = new HttpClient();
-            var res= HttpContext.Session.GetString("EmployeeID");
-            var response = await httpClient.GetAsync($"{localHostLink}api/EmployeeMasters/{res}");
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var res = HttpContext.Session.GetString("EmployeeID");            
+            var response = await httpClient.GetAsync($"api/EmployeeMasters/{res}");
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 emp = JsonConvert.DeserializeObject<EmployeeMaster>(apiResponse);
-            }            
+            
             return View(emp);
+            
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
-        public async Task<IActionResult> SelfAddressDetails(string id)     //View self details
+        public async Task<IActionResult> SelfAddressDetails()     //View self details
         {
             var emp = new EmpAddress();
             HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var res = HttpContext.Session.GetString("EmployeeID");
             
-            var response = await httpClient.GetAsync($"{localHostLink}api/EmpAddresses/{res}");
+            var response = await httpClient.GetAsync($"api/EmpAddresses/{res}");
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -82,14 +96,26 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             EmpAddress emplist = new EmpAddress();
             using (var httpClient = new HttpClient())
             {
+                httpClient.BaseAddress = new Uri($"{localHostLink}");
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var res = HttpContext.Session.GetString("EmployeeID");                
-                using (var response = await httpClient.GetAsync($"{localHostLink}api/EmpAddresses/{res}"))
+                using (var response = await httpClient.GetAsync($"api/EmpAddresses/{res}"))
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    emplist = JsonConvert.DeserializeObject<EmpAddress>(apiResponse);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        emplist = JsonConvert.DeserializeObject<EmpAddress>(apiResponse);
+                        return View(emplist);
+                    }
+                    else
+                    {
+                        return Unauthorized();
+                    }
                 }
             }
-            return View(emplist);
+            
         }
 
         [HttpPost]
@@ -97,10 +123,14 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             using (var httpClient = new HttpClient())
             {
+                httpClient.BaseAddress = new Uri($"{localHostLink}");
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 string stringData = JsonConvert.SerializeObject(emp);
                 var contentData = new StringContent(stringData, Encoding.UTF8, "application/json");
                 var res = HttpContext.Session.GetString("EmployeeID");                
-                HttpResponseMessage response = httpClient.PutAsync($"{localHostLink}api/EmpAddresses/" + res, contentData).Result;
+                HttpResponseMessage response = httpClient.PutAsync($"api/EmpAddresses/" + res, contentData).Result;
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                 ViewBagCheck(response.IsSuccessStatusCode);
             }
@@ -115,26 +145,47 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             List<LeaveDetail> leaveDetail = new List<LeaveDetail>();
             HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));            
             var res = HttpContext.Session.GetString("EmployeeID");
             ViewBag.LeaveWatch = res;
-            var response = await httpClient.GetAsync($"{localHostLink}api/LeaveDetails");
-            string apiResponse = await response.Content.ReadAsStringAsync();
-            leaveDetail = JsonConvert.DeserializeObject<List<LeaveDetail>>(apiResponse);
-            return View(leaveDetail);
+            var response = await httpClient.GetAsync($"api/LeaveDetails");
+            if (response.IsSuccessStatusCode)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                leaveDetail = JsonConvert.DeserializeObject<List<LeaveDetail>>(apiResponse);
+                return View(leaveDetail);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
-        public async Task<IActionResult> ViewLeaveMasterEmployee(string id)
+        public async Task<IActionResult> ViewLeaveMasterEmployee()
         {
             var leaveMaster = new LeaveMaster();
             HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{localHostLink}api/LeaveMasters/{id}");
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var res = HttpContext.Session.GetString("EmployeeID");
+            var response = await httpClient.GetAsync($"api/LeaveMasters/{res}");
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 leaveMaster = JsonConvert.DeserializeObject<LeaveMaster>(apiResponse);
+
+                return View(leaveMaster);
+            }
+            else
+            {
+                return Unauthorized();
             }
 
-            return View(leaveMaster);
         }
 
         public ActionResult ApplyForLeave()
@@ -163,15 +214,23 @@ namespace PayrollManagementSystem_Sprint2.Controllers
         {
             var payrollMaster = new PayrollMaster();
             HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri($"{localHostLink}");
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var res = HttpContext.Session.GetString("EmployeeID");
-            var response = await httpClient.GetAsync($"{localHostLink}api/PayrollMasters/{res}");
+            var response = await httpClient.GetAsync($"api/PayrollMasters/{res}");
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 payrollMaster = JsonConvert.DeserializeObject<PayrollMaster>(apiResponse);
+                return View(payrollMaster);
             }
-            
-            return View(payrollMaster);
+            else
+            {
+                return Unauthorized();
+            }
+
         }
         #endregion
 

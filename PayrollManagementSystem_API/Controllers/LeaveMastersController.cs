@@ -37,6 +37,7 @@ namespace PayrollManagementSystem_API.Controllers
         }
 
         // GET: api/LeaveMasters/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<LeaveMaster>> GetLeaveMaster(string id)
         {
