@@ -1,0 +1,67 @@
+﻿@model IEnumerable<PayrollManagementSystem_Sprint2.Models.LeaveMaster>
+
+@{
+    ViewData["Title"] = "LeaveMaster";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1 style="color:white"><strong>Leaves Taken by Employees</strong></h1>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LeavesAvailable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeavesAvailed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeavesBalance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            ViewBag.LeaveMastervariable = item.EmployeeId;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeavesAvailable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeavesAvailed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeavesBalance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeId)
+                </td>
+                <td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    <a asp-action="EditLeaveMaster" asp-route-id="@ViewBag.LeaveMastervariable"><strong>Reset Leave Master</strong></a> |
+    <a asp-action="Index"><strong>Back to Dashboard</strong></a>
+</p>
+
+<style>
+    label {
+        color: white;
+    }
+
+    a {
+        color: greenyellow;
+        font-weight: bold;
+    }
+</style>

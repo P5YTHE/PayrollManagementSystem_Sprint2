@@ -1,0 +1,101 @@
+﻿@model IEnumerable<PayrollManagementSystem_Sprint2.Models.LeaveDetail>
+
+@{
+    ViewData["Title"] = "Leave Details";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1 style="color:white"><strong>Leave Details</strong></h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplyDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveDays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reason)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveMonth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApprovedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeaveTypeNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplyDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveDays)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveMonth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApprovedBy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveTypeNavigation.TypesOfLeave)
+                </td>
+                <td>
+                    <a asp-action="EditLeaveStatus" asp-route-id="@item.IndexLd">Edit</a> |
+                    <a asp-action="ViewLeaveDetails" asp-route-id="@item.IndexLd">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-action="AdminDashboard"><strong>Back to Dashboard</strong></a> |
+    <a asp-action="LeaveMaster"><strong>View Leave Table</strong></a>
+</div>
+<div class="btn-box">
+    <a asp-area="" asp-controller="Authentication" asp-action="Logout" class="btn-1"><strong>Logout</strong> </a>
+</div>
+<style>
+    label {
+        color: white;
+    }
+
+    a {
+        color: greenyellow;
+        font-weight: bold;
+    }
+</style>
+
+
+

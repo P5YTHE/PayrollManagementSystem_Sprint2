@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<body>
+
+    <section class="service_section layout_padding">
+        <div class="container">
+            <div class="heading_container heading_center" style="background-color: deepskyblue">
+                <h2 style="color:white">
+                    ADMIN DASHBOARD
+                </h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="box b1">
+
+                        <div class="detail-box">
+                            <h5>
+                                EMPLOYEE DETAILS
+                            </h5>
+                            <a asp-action="Employees">
+                                Open
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="box b2">
+
+                        <div class="detail-box">
+                            <h5>
+                                APPROVE LEAVES
+                            </h5>
+                            <a asp-action="LeaveDetails">
+                                Open
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="box b3">
+                        <div class="detail-box">
+                            <h5>
+                                APPROVE TIMESHEEETS
+                            </h5>
+                            <a asp-action="EmployeeTimesheets">
+                                Open
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="box b4">
+                        <div class="detail-box">
+                            <h5>
+                                GENERATE SALARY REPORTS
+                            </h5>
+                            <a asp-action="PayrollReport">
+                                Open
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="box b5">
+                        <div class="detail-box">
+                            <h5>
+                                EMPLOYEE DASHBOARD
+                            </h5>
+                            <a asp-controller="Employee" asp-action="EmployeeDashboard">
+                                Open
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="box b6">
+                        <div class="detail-box">
+                            <h5>
+                                LOGOUT
+                            </h5>
+                            <a asp-controller="Authentication" asp-action="Logout">
+                                Click
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <a asp-action="Index" style="color:greenyellow"><strong>Back To Home</strong></a>
+</body>
+
+<style>
+    label {
+        color: white;
+    }
+
+    a {
+        color: greenyellow;
+        font-weight: bold;
+    }
+</style>

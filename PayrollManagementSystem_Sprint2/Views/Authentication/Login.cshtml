@@ -1,0 +1,48 @@
+﻿@model PayrollManagementSystem_Sprint2.Models.LoginDetails
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 style="color:white"><strong>LOGIN</strong></h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login" style="color:white">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label style="color:white" asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label style="color:white" asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index"><strong>Back to Home</strong></a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<style>
+    label {
+        color: white;
+    }
+
+    a {
+        color: greenyellow;
+        font-weight: bold;
+    }
+</style>
