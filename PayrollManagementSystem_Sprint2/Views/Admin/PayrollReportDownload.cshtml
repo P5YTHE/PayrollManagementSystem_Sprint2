@@ -5,51 +5,14 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1 style="color:white"><strong>PayrollReportDownload</strong></h1>
+<h1 style="color:white"><strong>Payroll Report Download</strong></h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeDesignation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeSalary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeGradeNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeDesignation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeSalary)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeGrade)
-                </td>
-                <td>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div>
+    <p style="color:white"><strong>Click the button below</strong></p>
+    <</div>>
 <a asp-action="DownloadPayroll"><strong>Download</strong></a> |
 <a asp-action="AdminDashboard"><strong>Back to Dashboard</strong></a>
 <style>
