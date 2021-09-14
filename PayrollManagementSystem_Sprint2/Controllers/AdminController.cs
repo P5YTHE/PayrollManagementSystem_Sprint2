@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PayrollManagementSystem_Sprint2.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -17,45 +15,37 @@ namespace PayrollManagementSystem_Sprint2.Controllers
     
     public class AdminController : Controller
     {
-        static string localHostLink = "https://localhost:44314/";  //Common localhost link variable
+        static string localHostLink = "https://localhost:44314/";  //localhost link variable
 
-        static List<PayrollMaster> payrollReport = new List<PayrollMaster>();
+        static List<PayrollMaster> payrollReport = new List<PayrollMaster>();  //static list to hold payroll for downloading
         
         public IActionResult Index()
         {            
                 return View();
-        }
+        }      //Index Page
 
         public IActionResult AdminDashboard()
         {
             return View();
-        }
-
-
-        //Index 
-
-
-        public IActionResult Temp()
-        {
-            return View();
-        }
+        }          //Admin Dashboard Page
+      
         public void ViewBagCheck(bool variable)
         {
             if (variable)
             {
                 ViewBag.Message = "Operation Successfull";
-                ViewBag.Color = "green";
+                ViewBag.Color = "greenyellow";
             }
             else
             {
                 ViewBag.Message = "Operation unsuccessful";
-                ViewBag.Color = "red";
+                ViewBag.Color = "tomato";
             }
-        }
+        }        //Pass change status to viewbag 
         
-        #region Employees
+        #region Employees     //Consists of all functions regarding EmployeeMaster and EmpAddress Tables
 
-        public async Task<IActionResult> Employees()                 //View All Employees
+        public async Task<IActionResult> Employees()
         {
             List<EmployeeMaster> empList = new List<EmployeeMaster>();
             HttpClient httpClient = new HttpClient();
@@ -63,10 +53,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Token"));
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var response = await httpClient.GetAsync($"api/EmployeeMasters");
-            //string apiResponse = await response.Content.ReadAsStringAsync();
-            //empList = JsonConvert.DeserializeObject<List<EmployeeMaster>>(apiResponse);
+            var response = await httpClient.GetAsync($"api/EmployeeMasters");            
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -74,10 +61,10 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 return View(empList);
             }
             else { return Unauthorized(); }
-        }
+        }    //View All Employees
 
         [HttpGet]
-        public async Task<IActionResult> EmployeeDelete(string id)     //Delete one employee
+        public async Task<IActionResult> EmployeeDelete(string id)
         {
             var emp = new EmployeeMaster();
             HttpClient httpClient = new HttpClient();
@@ -88,9 +75,10 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 emp = JsonConvert.DeserializeObject<EmployeeMaster>(apiResponse);                
             }
             return View(emp);
-        }    
+        }       //Delete one employee
+
         [HttpPost]
-        public async Task<IActionResult> EmployeeDelete(string id, EmployeeMaster emp)  //Post method Delete one employee
+        public async Task<IActionResult> EmployeeDelete(string id, EmployeeMaster emp) 
         {
             using (var httpClient = new HttpClient())
             {
@@ -99,13 +87,12 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     ViewBagCheck(response.IsSuccessStatusCode);
-                }  
-                
+                }                 
             }
-            return View(); 
-        }  
+            return View();
+        }        //Post method Delete one employee
 
-        public async Task<IActionResult> ViewAddressDetails(string id)                 //View All Employee Addresses
+        public async Task<IActionResult> ViewAddressDetails(string id) 
         {
             var empAddress = new EmpAddress();
             HttpClient httpClient = new HttpClient();
@@ -116,12 +103,12 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 empAddress = JsonConvert.DeserializeObject<EmpAddress>(apiResponse);
             }
             return View(empAddress);
-        }
+        }          //View All Employee Addresses
 
-        public ActionResult CreateNewEmployee()
+        public ActionResult CreateNewEmployee()     
         {            
             return View();
-        }
+        }          //Create New Employee Function
 
         [HttpPost]
         public async Task<ActionResult> CreateNewEmployee(EmployeeMaster employee)
@@ -133,17 +120,17 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             if (result.IsSuccessStatusCode)
             {
                 ViewBag.Message = "New Employee Created Successfully";
-                ViewBag.Color = "green";
+                ViewBag.Color = "greenyellow";
             }
             else
             {
                 ViewBag.Message = "Exployee not inserted,Kindly check all the details again";
-                ViewBag.Color = "red";
+                ViewBag.Color = "tomato";
             }
             return View();
-        }
+        }     //Post Method for Create New Employee
 
-        public async Task<IActionResult> EditEmployeeDetails(string id)            //Edit Employee Details
+        public async Task<IActionResult> EditEmployeeDetails(string id)
         {
             EmployeeMaster emplist = new EmployeeMaster();
             using (var httpClient = new HttpClient())
@@ -155,7 +142,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 }
             }
             return View(emplist);
-        }
+        }    //Edit Employee Details
 
         [HttpPost]
         public async Task<IActionResult> EditEmployeeDetails(EmployeeMaster employee)
@@ -169,15 +156,13 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 ViewBagCheck(response.IsSuccessStatusCode);
             }
             return View(employee);
-        }
-
-
+        }   //Post Method for Edit Employee
 
         #endregion
 
-        #region Timesheet
+        #region Timesheet   //Consists of all functions regarding Timesheet
 
-        public async Task<IActionResult> EmployeeTimesheets()                 //View All Timesheets
+        public async Task<IActionResult> EmployeeTimesheets()
         {
             List<TimeSheet> timesheetList = new List<TimeSheet>();
             HttpClient httpClient = new HttpClient();
@@ -196,9 +181,9 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             {
                 return Unauthorized();
             }
-        }
+        }        //View All Timesheets
 
-        public async Task<IActionResult> EditTimesheet(int id)             //Approve Timesheets
+        public async Task<IActionResult> EditTimesheet(int id)
         {
             TimeSheet timesheetList = new TimeSheet();
             using (var httpClient = new HttpClient())
@@ -210,7 +195,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 }
             }
             return View(timesheetList);
-        }
+        }       //Approve Timesheets
 
         [HttpPost]
         public async Task<IActionResult> EditTimesheet(TimeSheet timesheet)
@@ -224,16 +209,15 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 ViewBagCheck(response.IsSuccessStatusCode);
             }
             return View(timesheet);
-        }    //Post method
+        }    //Post method Approve Timesheets
 
         #endregion
 
-        #region Payroll
-        //View Salary report of all employees	
+        #region Payroll   //Consists of all functions regarding Payroll Master and Payroll Details        	
 
-        public async Task<IActionResult> PayrollReport()
+        public async Task<IActionResult> PayrollReport() 
         {
-            List<PayrollMaster> payrollMaster = new List<PayrollMaster>();
+            payrollReport.Clear();
             HttpClient httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri($"{localHostLink}");
             httpClient.DefaultRequestHeaders.Clear();
@@ -244,14 +228,17 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                payrollMaster = JsonConvert.DeserializeObject<List<PayrollMaster>>(apiResponse);
-                return View(payrollMaster);
+                
+                payrollReport = JsonConvert.DeserializeObject<List<PayrollMaster>>(apiResponse);
+                var a = 3;
+                return View(payrollReport);
             }
             else
             {
                 return Unauthorized();
             }
-        }
+        }    //View All Payroll 
+
         public async Task<IActionResult> ViewPayrollDetails(string id)
         {
             var payrollDetail = new PayrollMaster();
@@ -263,8 +250,9 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 payrollDetail = JsonConvert.DeserializeObject<PayrollMaster>(apiResponse);
             }
             return View(payrollDetail);
-        }
-        public async Task<IActionResult> EditGradeDetails(string id)            //Edit Employee Details
+        }   //View Payroll Details
+
+        public async Task<IActionResult> EditGradeDetails(string id)
         {
             PayrollMaster emplist = new PayrollMaster();
             using (var httpClient = new HttpClient())
@@ -276,7 +264,8 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 }
             }
             return View(emplist);
-        }
+        }             //Edit Employee  Grade Details
+
         [HttpPost]
         public async Task<IActionResult> EditGradeDetails(PayrollMaster employee2)
         {
@@ -289,17 +278,14 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 ViewBagCheck(response.IsSuccessStatusCode);
             }
             return View(employee2);
-        }
+        }   //Edit Employee Grade and Designation
 
         public async Task<IActionResult> PayrollReportDownload()
-        {
-            
-            HttpClient httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"{localHostLink}api/PayrollMasters");
-            string apiResponse = await response.Content.ReadAsStringAsync();
-            payrollReport = JsonConvert.DeserializeObject<List<PayrollMaster>>(apiResponse);            
+        {            
+           
             return View(payrollReport);
-        }
+        }       //Download Payroll Report 
+
         public FileResult DownloadPayroll()
         {            
             StringBuilder sb = new StringBuilder();
@@ -313,10 +299,12 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             var byteArray = Encoding.ASCII.GetBytes(data);
             MemoryStream stream = new MemoryStream(byteArray);            
             return File(stream, "text/plain", "Report"+DateTime.Today+".txt");
-        }
+        }       //Return Report File
+
         #endregion
 
-        #region Leaves
+        #region Leaves  //Consists of all functions regarding Leave Details and Leave Master Table
+
         public async Task<IActionResult> LeaveDetails()
         {
             List<LeaveDetail> leaveDetail = new List<LeaveDetail>();
@@ -336,7 +324,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             {
                 return Unauthorized();
             }
-        }
+        }         //Display Leave Details table
 
         public async Task<IActionResult> ViewLeaveDetails(string id)
         {
@@ -349,7 +337,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 leaveDetail = JsonConvert.DeserializeObject<LeaveDetail>(apiResponse);
             }
             return View(leaveDetail);
-        }
+        }    //View Leave Details
 
         public async Task<IActionResult> EditLeaveStatus(int id)
         {
@@ -363,7 +351,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 }
             }
             return View(leaveDetail);
-        }
+        }     //Edit Leave Status
 
         [HttpPost]
         public async Task<IActionResult> EditLeaveStatus(LeaveDetail leaveDetail)
@@ -378,7 +366,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
 
             }
             return View(leaveDetail);
-        }
+        }   //Edit Leave Status Post Method
 
         public async Task<IActionResult> LeaveMaster()
         {
@@ -388,7 +376,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             string apiResponse = await response.Content.ReadAsStringAsync();
             leaveMaster = JsonConvert.DeserializeObject<List<LeaveMaster>>(apiResponse);
             return View(leaveMaster);
-        }
+        }    //View Leave Master Table
 
         public async Task<IActionResult> EditLeaveMaster(int id)
         {
@@ -404,7 +392,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 }
             }
             return View(leavesObj);
-        }
+        }     //Edit Leave Master
 
         [HttpPost]
         public async Task<IActionResult> EditLeaveMaster(LeaveMaster leavesObj)
@@ -419,8 +407,7 @@ namespace PayrollManagementSystem_Sprint2.Controllers
                 ViewBagCheck(response.IsSuccessStatusCode);
             }
             return View(leavesObj);
-        }
-
+        }    //Edit Leave master Post
 
         #endregion
 

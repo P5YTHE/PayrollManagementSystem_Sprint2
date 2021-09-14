@@ -35,12 +35,12 @@ namespace PayrollManagementSystem_Sprint2.Controllers
             if (variable)
             {
                 ViewBag.Message = "Operation Successfull";
-                ViewBag.Color = "green";
+                ViewBag.Color = "greenyellow";
             }
             else
             {
                 ViewBag.Message = "Operation unsuccessful";
-                ViewBag.Color = "red";
+                ViewBag.Color = "tomato";
             }
         }
 

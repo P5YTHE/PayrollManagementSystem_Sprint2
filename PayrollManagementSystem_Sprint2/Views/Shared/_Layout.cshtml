@@ -59,8 +59,8 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="container-fluid footer_section">
+    
+    <footer class="container-fluid footer_section" >
         <p>
             &copy; <span id="currentYear"></span> All Rights Reserved. Designed for
             <a href="https://html.design/">Sprint 2</a>
@@ -72,10 +72,12 @@
             &copy; 2021 - Bootstrap - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>
 
@@ -84,5 +86,19 @@
     table {
         background-color: white;
         color: aliceblue;
+    }
+    footer.container-fluid {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;        
+    }
+    footer.border {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
     }
 </style>

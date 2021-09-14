@@ -6,8 +6,10 @@
 }
 
 <h1 style="color:white"><strong>EditGradeDetails</strong></h1>
-
-<h4>PayrollMaster</h4>
+@if (ViewBag.Message != null)
+{
+    <p style="color:@ViewBag.Color">@ViewBag.Message</p>
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
